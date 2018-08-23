@@ -41,11 +41,11 @@ function runCase(testCase) {
   test(testCase.name, runTest);
 
   function runTest(t) {
-    var collect = CollectInChannel(
-      { channel: testCase.channel, properties: testCase.properties },
-      checkResult
-    );
-    collect(testCase.callbackError, testCase.incomingBody);
+    var collect = CollectInChannel({
+      channel: testCase.channel,
+      properties: testCase.properties
+    });
+    collect(testCase.callbackError, testCase.incomingBody, checkResult);
 
     function checkResult(error, channel) {
       if (testCase.expectedErrorMessage) {

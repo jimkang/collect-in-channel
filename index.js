@@ -1,7 +1,7 @@
-function CollectToChannel({ channel, properties }, done) {
+function CollectToChannel({ channel, properties }) {
   return collectToChannel;
 
-  function collectToChannel(error, body) {
+  function collectToChannel(error, body, done) {
     if (error) {
       done(error);
     } else {

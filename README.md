@@ -16,14 +16,14 @@ Usage
     var Collect = require('collect-in-channel');
     var sb = require('standard-bail')();
 
-    callApi(url1, Collect({ channel: {}, properties: [ 'username' ] }, sb(getNotes, handleError));
+    callApi(url1, Collect({ channel: {}, properties: [ 'username' ] }), sb(getNotes, handleError));
     
     function getNotes(channel) {
-      callApi(url2 + channel.username, Collect({ channel, properties: [ 'notes' ] }, sb(getFirstNoteContent, handleError)));
+      callApi(url2 + channel.username, Collect({ channel, properties: [ 'notes' ] }), sb(getFirstNoteContent, handleError));
     }
  
     function getFirstNoteContent(channel) {
-      callApi(url3 + channel.username + '/notes/' + channel.notes[0], Collect({ channel: properties: [ [ 'body', 'noteContent' ] ], sb(logContent, handleError)));
+      callApi(url3 + channel.username + '/notes/' + channel.notes[0], Collect({ channel: properties: [ [ 'body', 'noteContent' ] ]}), sb(logContent, handleError));
     }
 
     function logContent(channel) {
@@ -39,6 +39,10 @@ Params:
 - opts:
     - channel: The channel object to add things to.
     - properties: A list of properties to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
+
+It will return a callback handler that takes:
+- An error (or null, if there's no error).
+- A body object that is usually the result of the previous call.
 - callback: This is the callback that it should call after it's done updating the channel.
 
 Tests
