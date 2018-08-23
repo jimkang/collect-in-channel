@@ -1,15 +1,23 @@
-function CollectToChannel({ channel, properties }) {
-  return collectToChannel;
+function CollectToChannel({ channel, properties, noErrorParam }) {
+  if (noErrorParam) {
+    return collectToChannelWithoutErrorParam;
+  } else {
+    return collectToChannel;
+  }
 
   function collectToChannel(error, body, done) {
     if (error) {
       done(error);
     } else {
-      if (body) {
-        properties.forEach(addToChannel);
-      }
-      done(null, channel);
+      collectToChannelWithoutErrorParam(body, done);
     }
+  }
+
+  function collectToChannelWithoutErrorParam(body, done) {
+    if (body) {
+      properties.forEach(addToChannel);
+    }
+    done(null, channel);
 
     function addToChannel(property) {
       if (Array.isArray(property) && property.length === 2) {

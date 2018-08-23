@@ -45,6 +45,8 @@ It will return a callback handler that takes:
 - A body object that is usually the result of the previous call.
 - callback: This is the callback that it should call after it's done updating the channel.
 
+If you want it to generate a callback handler that just takes a body and a callback, without an error param, pass `{ noErrorParam: true }` to the constructor.
+
 Tests
 -----
 

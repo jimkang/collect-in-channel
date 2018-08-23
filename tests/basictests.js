@@ -32,6 +32,14 @@ var testCases = [
     properties: [['statusCode', 'code'], 'sum'],
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
+  },
+  {
+    name: 'Generate callback handler that does take an error param',
+    channel: { id: 'existing' },
+    properties: [['statusCode', 'code'], 'sum'],
+    noErrorParam: true,
+    incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
+    expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
   }
 ];
 
@@ -43,9 +51,14 @@ function runCase(testCase) {
   function runTest(t) {
     var collect = CollectInChannel({
       channel: testCase.channel,
-      properties: testCase.properties
+      properties: testCase.properties,
+      noErrorParam: testCase.noErrorParam
     });
-    collect(testCase.callbackError, testCase.incomingBody, checkResult);
+    if (testCase.noErrorParam) {
+      collect(testCase.incomingBody, checkResult);
+    } else {
+      collect(testCase.callbackError, testCase.incomingBody, checkResult);
+    }
 
     function checkResult(error, channel) {
       if (testCase.expectedErrorMessage) {
