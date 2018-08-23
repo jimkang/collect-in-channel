@@ -1,6 +1,6 @@
 {
   "name": "collect-in-channel",
-  "version": "1.0.0",
+  "version": "2.0.0",
   "description": "A callback wrapper that will handle adding things passed to the callback to a 'channel'. A channel is an object that is being passed throughout a callback chain. Each callback may add things to that channel and look up things in that channel.",
   "main": "index.js",
   "scripts": {
