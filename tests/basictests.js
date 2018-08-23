@@ -40,6 +40,23 @@ var testCases = [
     noErrorParam: true,
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
+  },
+  {
+    name: 'Use custom collector',
+    channel: { id: 'existing' },
+    properties: [
+      ['statusCode', 'code'],
+      'sum',
+      [body => body.tree.b, 'greeting']
+    ],
+    noErrorParam: true,
+    incomingBody: {
+      statusCode: 200,
+      sum: 1000000,
+      extraJunk: 'extra',
+      tree: { a: 'hey', b: 'yo' }
+    },
+    expectedChannel: { id: 'existing', code: 200, sum: 1000000, greeting: 'yo' }
   }
 ];
 

@@ -21,7 +21,12 @@ function CollectToChannel({ channel, properties, noErrorParam }) {
 
     function addToChannel(property) {
       if (Array.isArray(property) && property.length === 2) {
-        channel[property[1]] = body[property[0]];
+        let firstElement = property[0];
+        if (typeof firstElement === 'function') {
+          channel[property[1]] = firstElement(body);
+        } else {
+          channel[property[1]] = body[property[0]];
+        }
       } else {
         channel[property] = body[property];
       }

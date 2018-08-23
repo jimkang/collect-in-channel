@@ -39,6 +39,7 @@ Params:
 - opts:
     - channel: The channel object to add things to.
     - properties: A list of properties to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
+        - If the first element of the property is a function, it'll pass the body to it and let the function come up with the value to store in the channel.
 
 It will return a callback handler that takes:
 - An error (or null, if there's no error).
