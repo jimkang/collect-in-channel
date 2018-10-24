@@ -1,13 +1,16 @@
 function CreateCollector({ channel }) {
   return CallbackMaker;
 
-  function CallbackMaker({ properties, noErrorParam }) {
+  function CallbackMaker({ props, properties, noErrorParam }) {
+    if (!Array.isArray(props)) {
+      props = properties;
+    }
     if (noErrorParam) {
       return collectToChannelWithoutErrorParam;
     } else {
       return collectToChannel;
     }
-  
+
     function collectToChannel(error, body, done) {
       if (error) {
         done(error);
@@ -18,7 +21,7 @@ function CreateCollector({ channel }) {
 
     function collectToChannelWithoutErrorParam(body, done) {
       if (body) {
-        properties.forEach(addToChannel);
+        props.forEach(addToChannel);
       }
       done(null, channel);
 

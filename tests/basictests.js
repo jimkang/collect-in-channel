@@ -6,7 +6,7 @@ var testCases = [
   {
     name: 'Collect two properties',
     channel: { id: 'existing' },
-    properties: ['statusCode', 'sum'],
+    props: ['statusCode', 'sum'],
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', statusCode: 200, sum: 1000000 }
   },
@@ -71,6 +71,7 @@ function runCase(testCase) {
     });
 
     var callback = Collect({
+      props: testCase.props,
       properties: testCase.properties,
       noErrorParam: testCase.noErrorParam
     });

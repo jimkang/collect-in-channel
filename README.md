@@ -3,8 +3,6 @@ collect-in-channel
 
 A callback wrapper that will handle adding things passed to the callback to a 'channel'. A channel is an object that is being passed throughout a callback chain. Each callback may add things to that channel and look up things in that channel.
 
-(This may turn out to be a bad idea; trying it out.)
-
 Installation
 ------------
 
@@ -18,14 +16,14 @@ Usage
     var channel = {};
     var Collect = CollectConstructor({ channel });
 
-    callApi(url1, Collect({ properties: [ 'username' ] }), sb(getNotes, handleError));
+    callApi(url1, Collect({ props: [ 'username' ] }), sb(getNotes, handleError));
     
     function getNotes(channel) {
-      callApi(url2 + channel.username, Collect({ channel, properties: [ 'notes' ] }), sb(getFirstNoteContent, handleError));
+      callApi(url2 + channel.username, Collect({ props: [ 'notes' ] }), sb(getFirstNoteContent, handleError));
     }
  
     function getFirstNoteContent(channel) {
-      callApi(url3 + channel.username + '/notes/' + channel.notes[0], Collect({ channel: properties: [ [ 'body', 'noteContent' ] ]}), sb(logContent, handleError));
+      callApi(url3 + channel.username + '/notes/' + channel.notes[0], Collect({ channel: props: [ [ 'body', 'noteContent' ] ]}), sb(logContent, handleError));
     }
 
     function logContent(channel) {
@@ -42,7 +40,7 @@ Params:
     - channel: The channel object to add things to.
 
 - Callback maker opts:
-    - properties: A list of properties to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
+    - props: A list of props to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
         - If the first element of the property is a function, it'll pass the body to it and let the function come up with the value to store in the channel.
 
 It will return a callback handler that takes:
