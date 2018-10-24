@@ -14,7 +14,7 @@ Usage
     var CollectConstructor = require('collect-in-channel');
     var sb = require('standard-bail')();
     var channel = {};
-    var Collect = CollectConstructor({ channel });
+    var Collect = CollectConstructor({ channel, noErrorParamDefault = false });
 
     callApi(url1, Collect({ props: [ 'username' ] }), sb(getNotes, handleError));
     
@@ -38,17 +38,18 @@ Params:
 
 - Constructor (returns a callback maker) opts:
     - channel: The channel object to add things to.
+    - noErrorParamDefault: The default setting for noErrorParams in calls to the callback maker. Defaults to true.
 
 - Callback maker opts:
     - props: A list of props to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
         - If the first element of the property is a function, it'll pass the body to it and let the function come up with the value to store in the channel.
+    - noErrorParam: If this is true, it will generate a callback that just takes a body and a callback, without an error param, pass `{ noErrorParam: true }` to the constructor. Otherwise, the callback will expect the first parameter to be an error.
 
 It will return a callback handler that takes:
 - An error (or null, if there's no error).
 - A body object that is usually the result of the previous call.
 - callback: This is the callback that it should call after it's done updating the channel.
 
-If you want it to generate a callback handler that just takes a body and a callback, without an error param, pass `{ noErrorParam: true }` to the constructor.
 
 Tests
 -----

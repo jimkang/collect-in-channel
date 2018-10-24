@@ -1,7 +1,12 @@
-function CreateCollector({ channel }) {
+function CreateCollector({ channel, noErrorParamDefault = true }) {
   return CallbackMaker;
 
-  function CallbackMaker({ props, properties, noErrorParam }) {
+  function CallbackMaker({
+    props,
+    properties,
+    noErrorParam = noErrorParamDefault
+  }) {
+    console.log('noErrorParam:', noErrorParam);
     if (!Array.isArray(props)) {
       props = properties;
     }

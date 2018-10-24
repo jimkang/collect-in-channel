@@ -7,6 +7,7 @@ var testCases = [
     name: 'Collect two properties',
     channel: { id: 'existing' },
     props: ['statusCode', 'sum'],
+    noErrorParamDefault: false,
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', statusCode: 200, sum: 1000000 }
   },
@@ -14,6 +15,7 @@ var testCases = [
     name: 'Properties missing from body',
     channel: { id: 'existing' },
     properties: ['statusCode', 'sum'],
+    noErrorParamDefault: false,
     incomingBody: { errorMessage: 'uh oh', sum: -1, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', statusCode: undefined, sum: -1 }
   },
@@ -21,6 +23,7 @@ var testCases = [
     name: 'Error',
     channel: { id: 'existing' },
     properties: ['statusCode', 'sum'],
+    noErrorParamDefault: false,
     callbackError: new Error('oh no'),
     incomingBody: { errorMessage: 'uh oh', sum: -1, extraJunk: 'extra' },
     expectedChannel: undefined,
@@ -30,6 +33,18 @@ var testCases = [
     name: 'Map property to a different name',
     channel: { id: 'existing' },
     properties: [['statusCode', 'code'], 'sum'],
+    noErrorParamDefault: false,
+    incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
+    expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
+  },
+  {
+    name:
+      'Generate callback handler that does take an error param even when the default is to look for one',
+    channel: { id: 'existing' },
+    properties: [['statusCode', 'code'], 'sum'],
+    noErrorParamDefault: false,
+    noErrorParam: true,
+    passNoErrorParam: true,
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
   },
@@ -37,7 +52,7 @@ var testCases = [
     name: 'Generate callback handler that does take an error param',
     channel: { id: 'existing' },
     properties: [['statusCode', 'code'], 'sum'],
-    noErrorParam: true,
+    passNoErrorParam: true,
     incomingBody: { statusCode: 200, sum: 1000000, extraJunk: 'extra' },
     expectedChannel: { id: 'existing', code: 200, sum: 1000000 }
   },
@@ -50,6 +65,7 @@ var testCases = [
       [body => body.tree.b, 'greeting']
     ],
     noErrorParam: true,
+    passNoErrorParam: true,
     incomingBody: {
       statusCode: 200,
       sum: 1000000,
@@ -67,7 +83,8 @@ function runCase(testCase) {
 
   function runTest(t) {
     var Collect = CollectInChannel({
-      channel: testCase.channel
+      channel: testCase.channel,
+      noErrorParamDefault: testCase.noErrorParamDefault
     });
 
     var callback = Collect({
@@ -75,7 +92,7 @@ function runCase(testCase) {
       properties: testCase.properties,
       noErrorParam: testCase.noErrorParam
     });
-    if (testCase.noErrorParam) {
+    if (testCase.passNoErrorParam) {
       callback(testCase.incomingBody, checkResult);
     } else {
       callback(testCase.callbackError, testCase.incomingBody, checkResult);
