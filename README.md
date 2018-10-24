@@ -13,10 +13,12 @@ Installation
 Usage
 -----
 
-    var Collect = require('collect-in-channel');
+    var CollectConstructor = require('collect-in-channel');
     var sb = require('standard-bail')();
+    var channel = {};
+    var Collect = CollectConstructor({ channel });
 
-    callApi(url1, Collect({ channel: {}, properties: [ 'username' ] }), sb(getNotes, handleError));
+    callApi(url1, Collect({ properties: [ 'username' ] }), sb(getNotes, handleError));
     
     function getNotes(channel) {
       callApi(url2 + channel.username, Collect({ channel, properties: [ 'notes' ] }), sb(getFirstNoteContent, handleError));
@@ -36,8 +38,10 @@ Usage
 
 Params:
 
-- opts:
+- Constructor (returns a callback maker) opts:
     - channel: The channel object to add things to.
+
+- Callback maker opts:
     - properties: A list of properties to look for on the incoming object. If a property is a two-element array, it'll look for the first element on the incoming object and store its value in the channel as the second element.
         - If the first element of the property is a function, it'll pass the body to it and let the function come up with the value to store in the channel.
 

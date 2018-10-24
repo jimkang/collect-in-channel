@@ -66,15 +66,18 @@ function runCase(testCase) {
   test(testCase.name, runTest);
 
   function runTest(t) {
-    var collect = CollectInChannel({
-      channel: testCase.channel,
+    var Collect = CollectInChannel({
+      channel: testCase.channel
+    });
+
+    var callback = Collect({
       properties: testCase.properties,
       noErrorParam: testCase.noErrorParam
     });
     if (testCase.noErrorParam) {
-      collect(testCase.incomingBody, checkResult);
+      callback(testCase.incomingBody, checkResult);
     } else {
-      collect(testCase.callbackError, testCase.incomingBody, checkResult);
+      callback(testCase.callbackError, testCase.incomingBody, checkResult);
     }
 
     function checkResult(error, channel) {
