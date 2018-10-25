@@ -6,7 +6,6 @@ function CreateCollector({ channel, noErrorParamDefault = true }) {
     properties,
     noErrorParam = noErrorParamDefault
   }) {
-    console.log('noErrorParam:', noErrorParam);
     if (!Array.isArray(props)) {
       props = properties;
     }
