@@ -1,3 +1,5 @@
+var getAtPath = require('get-at-path');
+
 function CreateCollector({ channel, noErrorParamDefault = true }) {
   return CallbackMaker;
 
@@ -34,6 +36,11 @@ function CreateCollector({ channel, noErrorParamDefault = true }) {
           let firstElement = property[0];
           if (typeof firstElement === 'function') {
             channel[property[1]] = firstElement(body);
+          } else if (typeof firstElement === 'object' && firstElement.path) {
+            channel[property[1]] = getAtPath(
+              body,
+              firstElement.path.split('/')
+            );
           } else {
             channel[property[1]] = body[property[0]];
           }

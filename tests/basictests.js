@@ -73,6 +73,24 @@ var testCases = [
       tree: { a: 'hey', b: 'yo' }
     },
     expectedChannel: { id: 'existing', code: 200, sum: 1000000, greeting: 'yo' }
+  },
+  {
+    name: 'Use path collector',
+    channel: { id: 'existing' },
+    properties: [
+      ['statusCode', 'code'],
+      'sum',
+      [{ path: 'tree/b' }, 'greeting']
+    ],
+    noErrorParam: true,
+    passNoErrorParam: true,
+    incomingBody: {
+      statusCode: 200,
+      sum: 1000000,
+      extraJunk: 'extra',
+      tree: { a: 'hey', b: 'yo' }
+    },
+    expectedChannel: { id: 'existing', code: 200, sum: 1000000, greeting: 'yo' }
   }
 ];
 
